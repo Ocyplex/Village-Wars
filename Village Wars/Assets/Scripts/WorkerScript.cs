@@ -9,6 +9,7 @@ public class WorkerScript : MonoBehaviour
     public float speed;
     public bool hasjob = false;
     public BuildingProducerScript Workplace;
+    private RessourcesScript myItem;
     public int inventory;
     public string job;
     public string searchFor;
@@ -33,15 +34,17 @@ public class WorkerScript : MonoBehaviour
         }
     }
 
-    public void goToAim(Vector3 AimVektor)
+    public void goToAim(Vector3 AimVektor, RessourcesScript myItem)
     {
         transform.Translate(AimVektor * speed * Time.deltaTime);
+        this.myItem = myItem;
     }
 
     private void OnCollisionEnter(Collision collision)
     {     
-        if (collision.gameObject.GetComponent<RessourcesScript>().art == searchFor && inventory == 0)
+        if (collision.gameObject.GetComponent<RessourcesScript>().art == searchFor && inventory == 0 && collision.gameObject.GetComponent<RessourcesScript>() == myItem)
         {
+            //collision.gameObject.GetComponent<RessourcesScript>().gm.cleanLists();
             Destroy(collision.gameObject);
             inventory++;
         }

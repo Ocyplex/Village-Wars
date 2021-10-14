@@ -5,14 +5,11 @@ using UnityEngine;
 public class RessourcesScript : MonoBehaviour
 {
     public string art;
+    public GameMaster gm;
+    public bool isInList = false;
     void Start()
     {
-        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

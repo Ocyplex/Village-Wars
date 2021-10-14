@@ -12,20 +12,25 @@ public class BuildingProducerScript : MonoBehaviour
     public bool hasJobOffer;
     public bool hasWorker;
     public WorkerScript worker;
-    List<RessourcesScript> ressourcesList = new List<RessourcesScript>();
+    public GameMaster gm;
+    public RessourcesScript[] ressourcesArray;
+    public bool ressourceListIsFull;
     
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        ressourcesList.AddRange(FindObjectsOfType<RessourcesScript>());
+        gm = FindObjectOfType<GameMaster>();
+        ressourcesArray = new RessourcesScript[5];
+        
     }
 
-    // Update is called once per frame
     void Update()
     {
         sequence();
+        if (!checkIfListIsFull())
+        {
+            fillRessourcesArray();
+        }
     }
 
     public bool checkIfHasJob()
@@ -40,14 +45,14 @@ public class BuildingProducerScript : MonoBehaviour
 
     public void cutTree()
     {       
-        Vector3 vector = (ressourcesList[treeNumber].transform.position - worker.transform.position).normalized;
-        worker.goToAim(vector);
+        Vector3 vector = (ressourcesArray[treeNumber].transform.position - worker.transform.position).normalized;
+        worker.goToAim(vector, ressourcesArray[treeNumber]);
     }
 
     public void goBack()
     {
         Vector3 vector = (transform.position - worker.transform.position).normalized;
-       worker.goToAim(vector);
+       worker.goToAim(vector,null);
 
     }
 
@@ -55,14 +60,14 @@ public class BuildingProducerScript : MonoBehaviour
     public bool findMyTarget()
     {
      
-        for(int i = 0;i< ressourcesList.Count;i++)
+        for(int i = 0;i<ressourcesArray.Length;i++)
         {
-            if (worker.job == "woodcutter" && ressourcesList[i] != null && ressourcesList[i].art == "tree")
+            if (worker.job == "woodcutter" && ressourcesArray[i] != null && ressourcesArray[i].art == "tree")
             {
                  treeNumber = i;
                  return true;
             }
-            if (worker.job == "stonecutter" && ressourcesList[i] != null && ressourcesList[i].art == "stone")
+            if (worker.job == "stonecutter" && ressourcesArray[i] != null && ressourcesArray[i].art == "stone")
             {
                 treeNumber = i;
                 return true;
@@ -104,6 +109,42 @@ public class BuildingProducerScript : MonoBehaviour
         if(gameObject.name == "mine")
         {
             worker.job = "miner";
+        }
+    }
+
+    public void fillRessourcesArray()
+    {
+        
+        for(int i = 0; i <  ressourcesArray.Length; i++)
+        {
+            while(ressourcesArray[i] != null)
+            {
+            i++;
+            }
+            Debug.Log("Jo");
+            for(int j = 0; j < gm.allRessources.Count ; j++)
+            { 
+            if(!gm.allRessources[j].isInList && gm.allRessources[j].art == searchFor)
+                {
+
+                    ressourcesArray[i] = gm.allRessources[j];
+                    ressourcesArray[i].isInList = true;
+                    gm.allRessources.RemoveAt(j);
+                    Debug.Log("Removed from GM!");
+                    break;
+                }
+            }
+        }
+    }
+
+    public bool checkIfListIsFull()
+    {
+        if(ressourcesArray[0] != null && ressourcesArray[1] != null && ressourcesArray[2] != null && ressourcesArray[3] != null && ressourcesArray[4] != null)
+        {
+            return true;
+        }else
+        {
+            return false;
         }
     }
 }

@@ -7,18 +7,14 @@ public class GameMaster : MonoBehaviour
     
     List<BuildingProducerScript> allBuildings = new List<BuildingProducerScript>();
     List<WorkerScript> allWorker = new List<WorkerScript>();
+    public List<RessourcesScript> allRessources = new List<RessourcesScript>();
 
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        allBuildings.AddRange(FindObjectsOfType<BuildingProducerScript>());
-        allWorker.AddRange(FindObjectsOfType<WorkerScript>());
-    }
 
     void Start()
     {
         allBuildings.AddRange(FindObjectsOfType<BuildingProducerScript>());
         allWorker.AddRange(FindObjectsOfType<WorkerScript>());
+        allRessources.AddRange(FindObjectsOfType<RessourcesScript>());
     }
 
     // Update is called once per frame
@@ -46,6 +42,19 @@ public class GameMaster : MonoBehaviour
             }
            
         }
+    }
+
+    public void searchForNewRessources()
+    {
+        
+    }
+
+    public void cleanLists()
+    {
+        allBuildings.Clear();
+        allBuildings.AddRange(FindObjectsOfType<BuildingProducerScript>());
+        allWorker.Clear();
+        allWorker.AddRange(FindObjectsOfType<WorkerScript>());
     }
 
 }
